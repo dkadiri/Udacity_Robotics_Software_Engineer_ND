@@ -5,8 +5,7 @@
 //Global client
 ros::ServiceClient client;
 
-void drive_robot(float lin_x, float ang_z)
-{
+void drive_robot(float lin_x, float ang_z){
 	ball_chaser::DriveToTarget srv;
 
 	srv.request.linear_x = lin_x;
@@ -25,18 +24,18 @@ void process_image_callback(const sensor_msgs::Image img)
 
 	for (int i = 0; i < img.height * img.step; i++) {
 		if (img.data[i] == white_pixel){
-      ROS_INFO("White ball is detected and moving towards it");
-      if (i % img.step <= 0.3 * img.step && i % img.step > 0){
-        ROS_INFO("Turning Left with 0.2 velocity");
-        drive_robot(0.0, 0.2);
-      } else if (i % img.step > 0.7 * img.step && i % img.step <= img.step){
-        ROS_INFO("Turning Right with 0.2 velocity");
-        drive_robot(0.0, -0.2);
-      } else if (i % img.step > 0.3 * img.step && i % img.step <= 0.7 * img.step){
-        ROS_INFO("Moving Forward with 0.2 velocity");
-        drive_robot(0.2, 0.0);
-      }
-			break;
+			ROS_INFO("White ball is detected and moving towards it");
+      		if (i % img.step <= 0.3 * img.step && i % img.step > 0){
+        		ROS_INFO("Turning Left with 0.2 velocity");
+        		drive_robot(0.0, 0.2);
+      		} else if (i % img.step > 0.7 * img.step && i % img.step <= img.step){
+				ROS_INFO("Turning Right with 0.2 velocity");
+				drive_robot(0.0, -0.2);
+			} else if (i % img.step > 0.3 * img.step && i % img.step <= 0.7 * img.step){
+				ROS_INFO("Moving Forward with 0.2 velocity");
+				drive_robot(0.2, 0.0);
+			}
+		break;
 		}
 	}
 }
