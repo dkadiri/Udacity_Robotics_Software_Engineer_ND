@@ -22,23 +22,27 @@ void process_image_callback(const sensor_msgs::Image img)
 {
 
 	int white_pixel = 255;
+	float lin_x = 0.0, ang_z = 0.0; 
 
 	for (int i = 0; i < img.height * img.step; i++) {
-		if (img.data[i] == white_pixel){
+		if (img.data[i] == white_pixel && img.data[i + 1] == white_pixel && img.data[i + 2] == white_pixel){
 			ROS_INFO("White ball is detected and moving towards it");
-      		if (i % img.step <= 0.3 * img.step && i % img.step > 0){
+			float ballPosition = i % img.step; //Ball position with respect to columns
+      		if (ballPosition <= 0.3 * img.step && ballPosition > 0){
         		ROS_INFO("Turning Left with 0.2 velocity");
-        		drive_robot(0.0, 0.2);
-      		} else if (i % img.step > 0.7 * img.step && i % img.step <= img.step){
+        		ang_z = 0.2;
+      		} else if (ballPosition > 0.7 * img.step && ballPosition <= img.step){
 				ROS_INFO("Turning Right with 0.2 velocity");
-				drive_robot(0.0, -0.2);
-			} else if (i % img.step > 0.3 * img.step && i % img.step <= 0.7 * img.step){
+				ang_z = -0.2;
+			} else if (ballPosition > 0.3 * img.step && ballPosition <= 0.7 * img.step){
 				ROS_INFO("Moving Forward with 0.2 velocity");
-				drive_robot(0.2, 0.0);
+				lin_x = 0.2;
 			}
 		break;
 		}
 	}
+
+	drive_robot(lin_x, ang_z);
 }
 
 int main(int argc, char** argv)
