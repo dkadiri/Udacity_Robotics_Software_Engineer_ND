@@ -28,13 +28,13 @@ void process_image_callback(const sensor_msgs::Image img)
 		if (img.data[i] == white_pixel && img.data[i + 1] == white_pixel && img.data[i + 2] == white_pixel){
 			ROS_INFO("White ball is detected and moving towards it");
 			float ballPosition = i % img.step; //Ball position with respect to columns
-      		if (ballPosition <= 0.3 * img.step && ballPosition > 0){
+      		if (ballPosition <= img.step / 3){
         		ROS_INFO("Turning Left with 0.2 velocity");
         		ang_z = 0.2;
-      		} else if (ballPosition > 0.7 * img.step && ballPosition <= img.step){
+      		} else if (ballPosition > (2 * img.step) / 3){
 				ROS_INFO("Turning Right with 0.2 velocity");
 				ang_z = -0.2;
-			} else if (ballPosition > 0.3 * img.step && ballPosition <= 0.7 * img.step){
+			} else if (ballPosition > img.step / 3 && ballPosition <= (2 * img.step) / 3){
 				ROS_INFO("Moving Forward with 0.2 velocity");
 				lin_x = 0.2;
 			}
